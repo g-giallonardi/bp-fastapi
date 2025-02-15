@@ -31,7 +31,7 @@ def rename_project(new_name, root_dir="."):
                 if new_content != content:
                     with open(file_path, "w", encoding="utf-8") as f:
                         f.write(new_content)
-                    print(f"🔄 Modifié : {file_path}")
+                    print(f"🔄 Changed : {file_path}")
 
     security_file = os.path.join(new_path, "core", "security.py")
     
@@ -47,24 +47,20 @@ def rename_project(new_name, root_dir="."):
         with open(security_file, "w", encoding="utf-8") as f:
             f.write(updated_security_content)
 
-        print(f"🔑 Nouvelle SECRET_KEY générée dans {security_file}")
+        print(f"🔑 New SECRET_KEY generated in {security_file}")
 
-    print("✅ Renommage terminé !")
+    print("✅ Rename fone !")
 
 def init_database(DATABASE_URL):
-    """Crée la base de données et ajoute les utilisateurs de test"""
-    print("📦 Initialisation de la base de données...")
+    print("📦 Database initialisation...")
 
-    # Connexion à la base de données
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    # Création des tables
     Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
 
-    # Vérifier si les utilisateurs existent déjà
     if not db.query(User).filter_by(email="admin@example.com").first():
         admin_user = User(email="admin@example.com", password=hash_password("admin123"), role="admin")
         db.add(admin_user)
@@ -75,7 +71,7 @@ def init_database(DATABASE_URL):
 
     db.commit()
     db.close()
-    print("✅ Base de données initialisée avec succès !")
+    print("✅ Database initialization done !")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -84,7 +80,6 @@ if __name__ == "__main__":
 
     new_name = sys.argv[1]
     DATABASE_URL = f"sqlite:///./{new_name}.db" 
-
 
     rename_project(new_name)
     init_database(DATABASE_URL)
