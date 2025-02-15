@@ -1,0 +1,10 @@
+uvicorn==0.34.0
+fastapi==0.115.8
+PyJWT==2.10.1
+passlib==1.7.4
+bcrypt==4.2.1
+SQLAlchemy==2.0.38
+pydantic[email]
+alembic==1.14.1
+load-dotenv==0.1.0
+python-dotenv==1.0.1
