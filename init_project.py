@@ -7,30 +7,17 @@ from core.database import Base
 from models.user import User
 from core.security import hash_password
 
-OLD_NAME = "bp_fastapi"  # Nom du template de base
-SECRET_KEY_LENGTH = 32   # Longueur de la SECRET_KEY
-
-DATABASE_URL = "sqlite:///./bp_fastapi.db"  # Base SQLite par défaut
+OLD_NAME = "bp_fastapi" 
+SECRET_KEY_LENGTH = 32 
 
 def generate_secret_key():
-    """Génère une SECRET_KEY aléatoire"""
     return secrets.token_hex(SECRET_KEY_LENGTH)
 
 def rename_project(new_name, root_dir="."):
-    """Renomme le projet et met à jour les fichiers"""
     
     old_path = os.path.join(root_dir, OLD_NAME)
     new_path = os.path.join(root_dir, new_name)
 
-    # Étape 1: Renommer le dossier principal
-    if os.path.exists(old_path):
-        os.rename(old_path, new_path)
-        print(f"✅ Dossier renommé : {OLD_NAME} → {new_name}")
-    else:
-        print(f"⚠️ Dossier {OLD_NAME} introuvable ! Vérifie ton emplacement.")
-        return
-
-    # Étape 2: Remplacer les imports et références dans les fichiers `.py`
     for dirpath, _, filenames in os.walk(root_dir):
         for filename in filenames:
             if filename.endswith(".py"):
@@ -46,7 +33,6 @@ def rename_project(new_name, root_dir="."):
                         f.write(new_content)
                     print(f"🔄 Modifié : {file_path}")
 
-    # Étape 3: Générer une nouvelle SECRET_KEY et l'insérer dans core/security.py
     security_file = os.path.join(new_path, "core", "security.py")
     
     if os.path.exists(security_file):
@@ -65,7 +51,7 @@ def rename_project(new_name, root_dir="."):
 
     print("✅ Renommage terminé !")
 
-def init_database():
+def init_database(DATABASE_URL):
     """Crée la base de données et ajoute les utilisateurs de test"""
     print("📦 Initialisation de la base de données...")
 
@@ -92,11 +78,13 @@ def init_database():
     print("✅ Base de données initialisée avec succès !")
 
 if __name__ == "__main__":
-    # if len(sys.argv) != 2:
-    #     print("❌ Usage : python init_project.py <nouveau_nom>")
-    #     sys.exit(1)
+    if len(sys.argv) != 2:
+        print("❌ Usage : python init_project.py <nouveau_nom>")
+        sys.exit(1)
 
-    # new_name = sys.argv[1]
+    new_name = sys.argv[1]
+    DATABASE_URL = f"sqlite:///./{new_name}.db" 
 
-    # rename_project(new_name)
-    init_database()
+
+    rename_project(new_name)
+    init_database(DATABASE_URL)

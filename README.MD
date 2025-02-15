@@ -62,7 +62,10 @@ cd myproject
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
+pip install --upgrade pip
 pip install -r requirements.txt
+pip install --force-reinstall --no-cache-dir bcrypt
+pip install --force-reinstall --no-cache-dir passlib
 ```
 
 ### 3️⃣ Initialize the project
@@ -78,7 +81,7 @@ These users are created only if they do not already exist in the database.
 
 ### 4️⃣ Run the application
 ```sh
-uvicorn myproject.main:app --reload  # Replace 'myproject' with your project name
+uvicorn main:app --reload  # Replace 'myproject' with your project name
 ```
 The API is accessible at:
 - **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
@@ -156,7 +159,7 @@ pip install pytest==8.3.4 httpx==0.28.1
 
 Run tests with:
 ```sh
-pytest tests/
+TESTING=True pytest tests/
 ```
 
 ### 🔹 **Included Tests:**
