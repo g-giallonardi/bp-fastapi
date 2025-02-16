@@ -23,7 +23,7 @@ def test_register_success(client, db):
     response = client.post("/api/v1/auth/register", json=NUSER_DATA)
     assert response.status_code == 201
     assert "token" in response.json()
-    time.sleep(1)
+
 
 def test_login_success(client,db):
     response = client.post("/api/v1/auth/login", json=NUSER_DATA)
