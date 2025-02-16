@@ -51,35 +51,12 @@ def rename_project(new_name, root_dir="."):
 
     print("✅ Rename fone !")
 
-def init_database(DATABASE_URL):
-    print("📦 Database initialisation...")
-
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-    Base.metadata.create_all(bind=engine)
-
-    db = SessionLocal()
-
-    if not db.query(User).filter_by(email="admin@example.com").first():
-        admin_user = User(email="admin@example.com", password=hash_password("admin123"), role="admin")
-        db.add(admin_user)
-
-    if not db.query(User).filter_by(email="user@example.com").first():
-        normal_user = User(email="user@example.com", password=hash_password("password123"), role="user")
-        db.add(normal_user)
-
-    db.commit()
-    db.close()
-    print("✅ Database initialization done !")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("❌ Usage : python init_project.py <nouveau_nom>")
+        print("❌ Usage : python init_project.py <new_name>")
         sys.exit(1)
 
     new_name = sys.argv[1]
-    DATABASE_URL = f"sqlite:///./{new_name}.db" 
 
     rename_project(new_name)
-    init_database(DATABASE_URL)

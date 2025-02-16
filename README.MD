@@ -19,9 +19,9 @@ myproject/  # Replace 'myproject' with your project name
 │   └── v1/
 │       ├── api_v1.py
 │       └── endpoints/
-│           ├── auth.py      # Example authentication endpoint
-│           ├── example.py   # Example generic endpoint
-│           ├── protected.py # Example protected endpoint
+│           ├── auth.py      # Example authentication endpoint to login and register user
+│           ├── example.py   # Example generic endpoint available for every user
+│           └── protected.py # Example protected endpoint available only for 'admin' role user
 ├── core/
 │   ├── config.py
 │   ├── database.py
@@ -40,10 +40,11 @@ myproject/  # Replace 'myproject' with your project name
 ├── tests/
 │   ├── test_main.py
 │   ├── test_auth.py
-│   ├── test_protected.py
-│   ├── __init__.py
+│   └── test_protected.py
 │── Dockerfile
-└── docker-compose.yml
+│── docker-compose.postgres.yml
+│── docker-compose.yml
+└── .dockerignore
 ```
 
 📌 **Note:** The `auth.py`, `example.py`, and `protected.py` endpoints are provided as examples. You can modify or remove them based on your project requirements.
@@ -69,19 +70,14 @@ pip install --force-reinstall --no-cache-dir passlib
 ```
 
 ### 3️⃣ Initialize the project
-Run the initialization script to configure the database, generate a new `SECRET_KEY`, and set up the project:
+Run the initialization script to generate a new `SECRET_KEY`, and change the template name by your choiced app_name:
 ```sh
 python init_project.py myproject  # Replace 'myproject' with your project name
 ```
-This script will also **create two default users**:
-- **Admin user**: `admin@example.com` with password `admin123`
-- **Normal user**: `user@example.com` with password `password123`
-
-These users are created only if they do not already exist in the database.
 
 ### 4️⃣ Run the application
 ```sh
-uvicorn main:app --reload  # Replace 'myproject' with your project name
+uvicorn app --reload  # Replace 'myproject' with your project name
 ```
 The API is accessible at:
 - **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
@@ -172,6 +168,46 @@ Example of running tests:
 pytest tests/
 ```
 If all tests pass, you should see output indicating successful test execution.
+
+---
+## 🚀 Dockerize Your FastAPI Application
+
+If you want to run your FastAPI application with Docker, here is the complete procedure to execute it and manage environment variables.
+
+---
+
+## 🚀 Dockerize Your FastAPI Application
+
+If you want to run your FastAPI application with Docker, here is the complete procedure to execute it and manage environment variables.
+
+---
+
+### 📌 **1. Use the Provided `Dockerfile` and `docker-compose`**
+The project already includes a ready-to-use `Dockerfile` and `docker-compose.yml`. However, you can customize them if needed based on your specific requirements.
+
+A **Docker Compose configuration** is available to directly use a **PostgreSQL database** without additional setup. This allows the application to run with a database service included.
+
+All environment variables are managed within the `docker-compose.yml` file, eliminating the need for a separate `.env` file.
+
+---
+
+### 📌 **2. Start the Application with `docker-compose`**
+The `docker-compose.yml` file is already configured to automatically load environment variables and run the application.
+
+#### 🔹 **Start the application with SQLite**
+```sh
+docker-compose up --build
+```
+
+#### 🔹 **Start the application with PostgreSQL**
+```sh
+docker-compose -f docker-compose.postgres.yml up --build
+```
+
+#### 🔹 **Stop the application**
+```sh
+docker-compose down
+```
 
 ---
 

@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: fooser
+      POSTGRES_PASSWORD: postword
+      POSTGRES_DB: fooslight
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "fooser", "-d", "fooslight"]
+      interval: 5s
+      retries: 5
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db 
+      DB_PORT: 5432
+      DB_USER: fooser 
+      DB_PASSWORD: postword
+      DB_NAME: fooslight
+      DB_TYPE: postgresql
+    restart: always
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
